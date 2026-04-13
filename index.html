@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chroma Meleons NFTs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #39FF14;
+            --accent: #ff00ea;
+            --text: #000;
+            --bg: #ffffff;
+            --nft-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; text-align: center; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+
+        /* Stats Area */
+        .stats-area { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; }
+        .stat-box { border: 2px solid #000; padding: 10px 20px; border-radius: 8px; background: #fff; box-shadow: 4px 4px 0px #000; }
+        .stat-box h4 { font-family: 'Bungee'; font-size: 0.6rem; color: #555; }
+        .stat-box p { font-family: 'Bungee'; font-size: 0.9rem; }
+
+        /* Hero Image with Black Layer Effect */
+        .main-img { 
+            width: 320px; 
+            border-radius: 20px; 
+            border: 8px solid #000;
+            box-shadow: 15px 15px 0px rgba(0,0,0,0.1);
+            margin: 20px 0;
+            transition: 0.3s;
+        }
+
+        /* Button Positioning: Left & Right + Bottom Middle */
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 500px;
+            margin: 30px auto 10px;
+        }
+        .btn-custom {
+            font-family: 'Bungee';
+            padding: 15px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            border: 3px solid #000;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .gtd-btn { background: #000; color: #fff; }
+        .mint-btn { background: var(--primary); color: #000; }
+        .approved-trigger { 
+            display: inline-block;
+            background: #fff; color: #000; 
+            font-size: 0.75rem; padding: 10px 25px; 
+            margin-top: 15px; border: 2px solid #000; 
+            box-shadow: 3px 3px 0px #000;
+        }
+        .btn-custom:active { transform: translate(2px, 2px); box-shadow: none; }
+
+        /* NFT Gallery with Black Outline Layers */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 60px 0;
+        }
+        .nft-item {
+            aspect-ratio: 1/1;
+            border: 4px solid #000;
+            border-radius: 12px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 8px 8px 0px #000;
+        }
+        .nft-item img { position: absolute; width: 100%; height: 100%; opacity: 0; transition: 0.5s; object-fit: cover; }
+        .nft-item.revealed img { opacity: 1; }
+
+        /* Professional Roadmap */
+        .roadmap { text-align: left; padding: 40px; background: #fafafa; border: 4px solid #000; border-radius: 20px; margin: 80px 0; box-shadow: 10px 10px 0px #eee; }
+        .roadmap h2 { font-family: 'Bungee'; color: var(--accent); margin-bottom: 25px; border-bottom: 4px solid #000; display: inline-block; }
+        .phase { margin-bottom: 35px; border-left: 5px solid var(--primary); padding-left: 20px; }
+        .phase h3 { font-family: 'Bungee'; font-size: 1.1rem; margin-bottom: 8px; }
+        .phase p { font-size: 0.95rem; color: #444; line-height: 1.5; }
+
+        /* FAQ Section */
+        .faq { text-align: left; margin-bottom: 80px; }
+        .faq h2 { font-family: 'Bungee'; margin-bottom: 25px; }
+        .faq-item { border-bottom: 2px solid #eee; padding: 15px 0; }
+        .faq-item h4 { font-family: 'Space Grotesk'; font-weight: 700; color: #000; }
+        .faq-item p { font-size: 0.9rem; color: #666; margin-top: 5px; }
+
+        /* Security Modal (Same as previous for stability) */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; }
+        .modal-box { background: #fff; width: 90%; max-width: 450px; padding: 35px; border: 5px solid #000; border-radius: 15px; }
+        .step { display: none; }
+        .step.active { display: block; }
+        .task-link { display: block; padding: 15px; margin: 10px 0; background: #eee; color: #000; text-decoration: none; border: 2px solid #000; font-family: 'Bungee'; font-size: 0.75rem; }
+        .task-link.done { background: var(--primary); }
+        .next-btn { width: 100%; padding: 15px; border: 3px solid #000; font-family: 'Bungee'; background: #ccc; cursor: not-allowed; margin-top: 10px; }
+        .next-btn.ready { background: var(--primary); cursor: pointer; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #000; font-family: 'Space Grotesk'; }
+
+        /* Footer Twitter */
+        .footer { padding: 50px 0; border-top: 2px solid #eee; }
+        .follow-x { display: inline-block; background: #000; color: #fff; padding: 15px 40px; font-family: 'Bungee'; text-decoration: none; border-radius: 50px; transition: 0.3s; }
+        .follow-x:hover { background: var(--accent); transform: scale(1.05); }
+
+        .approved-list { display: none; padding: 20px; background: #f9f9f9; border: 2px solid #000; margin-top: 15px; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>CHROMA MELEONS</h1>
+        
+        <div class="stats-area">
+            <div class="stat-box"><h4>SUPPLY</h4><p>1111</p></div>
+            <div class="stat-box"><h4>NETWORK</h4><p>BASE</p></div>
+            <div class="stat-box"><h4>MINT DATE</h4><p>APR 13</p></div>
+        </div>
+
+        <img src="https://i.ibb.co.com/WNqpmm2d/20260409-054444.png" class="main-img" alt="Hero Meleon">
+        
+        <div class="btn-container">
+            <button class="btn-custom gtd-btn" onclick="openModal()">GTD ACCESS</button>
+            <a href="https://opensea.io/" target="_blank" class="btn-custom mint-btn">MINT PAGE</a>
+        </div>
+        <button class="btn-custom approved-trigger" onclick="fetchApproved()">Check Approved List</button>
+        <div id="approvedList" class="approved-list">Updating List...</div>
+
+        <div class="gallery">
+            <div class="nft-item" onclick="reveal(this)">? <img src="https://i.ibb.co.com/vxMPRp1n/20260409-054537.png"></div>
+            <div class="nft-item" onclick="reveal(this)">? <img src="https://i.ibb.co.com/WWyYC8z2/20260409-054617.png"></div>
+            <div class="nft-item" onclick="reveal(this)">? <img src="https://i.ibb.co.com/fzY5MBjj/20260409-054651.png"></div>
+            <div class="nft-item" onclick="reveal(this)">? <img src="https://i.ibb.co.com/xq8vFj85/20260409-054734.png"></div>
+            <div class="nft-item" onclick="reveal(this)">? <img src="https://i.ibb.co.com/mVKVfs6h/20260409-054818.png"></div>
+            <div class="nft-item" onclick="reveal(this)">? <img src="https://i.ibb.co.com/mrqMMCWx/20260409-054954.png"></div>
+        </div>
+
+        <div class="roadmap">
+            <h2>MISSION ROADMAP 2026</h2>
+            <div class="phase">
+                <h3>01. THE AWAKENING (Q1)</h3>
+                <p>Launch of our chameleon-inspired social ecosystem. Distributing GTD Access to 1111 dedicated believers. Community building on the Base network.</p>
+            </div>
+            <div class="phase">
+                <h3>02. COLOR SURGE (Q2)</h3>
+                <p>Official Minting goes live on OpenSea. Rarity reveal for the 1111 unique 1/1 pieces. Verification on secondary markets and liquidity injection.</p>
+            </div>
+            <div class="phase">
+                <h3>03. CHROMA DOMINATION (Q3)</h3>
+                <p>Holder-exclusive drop events. Integration with Base ecosystem partners and secret mutation upgrades for long-term diamond hands.</p>
+            </div>
+        </div>
+
+        <div class="faq">
+            <h2>FREQUENTLY ASKED</h2>
+            <div class="faq-item">
+                <h4>What is GTD Access?</h4>
+                <p>GTD (Guaranteed) Access ensures you a spot to mint your Meleon before the public sale begins.</p>
+            </div>
+            <div class="faq-item">
+                <h4>Which network is this on?</h4>
+                <p>Chroma Meleons are natively hatched on the Base Network for low fees and high speed.</p>
+            </div>
+            <div class="faq-item">
+                <h4>How can I be Approved?</h4>
+                <p>Complete all social tasks in the GTD portal. We manually verify and approve active supporters.</p>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <a href="https://x.com/ChromaMeleons" target="_blank" class="follow-x">Follow X</a>
+        </footer>
+    </div>
+
+    <div class="modal" id="taskModal">
+        <div class="modal-box">
+            <div class="step active" id="s1">
+                <h2>Phase 1: Socials</h2>
+                <a href="https://x.com/intent/follow?screen_name=ChromaMeleons" target="_blank" class="task-link" id="l1" onclick="v(1)">FOLLOW @CHROMAMELEONS</a>
+                <a href="https://x.com/intent/follow?screen_name=ArivSartana" target="_blank" class="task-link" id="l2" onclick="v(2)">FOLLOW @ARIVSARTANA</a>
+                <button id="n1" class="next-btn" onclick="next(2)">CONTINUE</button>
+            </div>
+            <div class="step" id="s2">
+                <h2>Phase 2: Engage</h2>
+                <a href="https://x.com/intent/like?tweet_id=2042819486211031103" target="_blank" class="task-link" id="l3" onclick="v(3)">LIKE PINNED POST</a>
+                <a href="https://x.com/intent/retweet?tweet_id=2042819486211031103" target="_blank" class="task-link" id="l4" onclick="v(4)">REPOST PINNED POST</a>
+                <button id="n2" class="next-btn" onclick="next(3)">CONTINUE</button>
+            </div>
+            <div class="step" id="s3">
+                <h2>Phase 3: Verify</h2>
+                <a href="https://x.com/ChromaMeleons/status/2042819486211031103" target="_blank" class="task-link" id="l5" onclick="v(5)">COMMENT ON POST</a>
+                <input type="text" id="cLink" placeholder="Paste Comment Link">
+                <input type="text" id="uX" placeholder="Twitter (@...)">
+                <input type="text" id="wA" placeholder="Base Wallet Address">
+                <button id="subBtn" class="next-btn" onclick="submit()">SUBMIT ACCESS</button>
+            </div>
+            <div class="step" id="s4">
+                <h2 style="color:var(--primary)">CONGRATULATIONS!</h2>
+                <p>Your data has been sent for manual verification. Stay tuned!</p>
+                <button class="next-btn ready" onclick="location.reload()">CLOSE</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbySQaVfGEjWkSRUQuVyXzLkP4XBHbWojWX4T50thUvQto2JuMVnbqQfkGjCowyXnGkq/exec"; 
+
+        let checks = { 1:false, 2:false, 3:false, 4:false, 5:false };
+
+        function v(id) {
+            checks[id] = true;
+            document.getElementById('l'+id).classList.add('done');
+            if(checks[1] && checks[2]) document.getElementById('n1').classList.add('ready');
+            if(checks[3] && checks[4]) document.getElementById('n2').classList.add('ready');
+            if(checks[5]) document.getElementById('subBtn').classList.add('ready');
+        }
+
+        function next(n) {
+            if(n===2 && (!checks[1] || !checks[2])) return alert("Follow accounts first!");
+            if(n===3 && (!checks[3] || !checks[4])) return alert("Engage with post first!");
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+            document.getElementById('s'+n).classList.add('active');
+        }
+
+        function openModal() { document.getElementById('taskModal').style.display = 'flex'; }
+        function reveal(el) { el.classList.add('revealed'); }
+
+        function submit() {
+            if(!checks[5]) return alert("Complete the comment task!");
+            const user = document.getElementById('uX').value;
+            const wallet = document.getElementById('wA').value;
+            const link = document.getElementById('cLink').value;
+            if(!user || !wallet || !link) return alert("Fill all fields!");
+
+            document.getElementById('subBtn').innerText = "SENDING...";
+            fetch(API_URL, {
+                method: "POST",
+                body: JSON.stringify({user, wallet, link})
+            }).then(() => next(4)).catch(() => alert("Submission error. Check Script URL."));
+        }
+
+        function fetchApproved() {
+            const list = document.getElementById('approvedList');
+            list.style.display = 'block';
+            fetch(API_URL)
+            .then(res => res.json())
+            .then(data => {
+                list.innerHTML = "<h4>Status List:</h4>";
+                data.forEach(i => {
+                    let c = i.status === "Approved" ? "green" : (i.status === "Fake" ? "red" : "gray");
+                    list.innerHTML += `<p style="color:${c}; font-size: 13px;">${i.user}: <b>${i.status}</b></p>`;
+                });
+            });
+        }
+    </script>
+</body>
+</html>
