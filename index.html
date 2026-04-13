@@ -14,6 +14,26 @@
             --nft-shadow: 0 10px 20px rgba(0,0,0,0.15);
         }
 
+        /* Marquee Styles */
+        .scrolling-ticker {
+            background: #FFD700;
+            color: #000;
+            font-family: 'Bungee';
+            padding: 10px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            border-bottom: 3px solid #000;
+        }
+        .ticker-text {
+            display: inline-block;
+            animation: marquee 15s linear infinite;
+            font-size: 1.2rem;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background-color: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; text-align: center; }
         .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
@@ -24,7 +44,6 @@
         .stat-box h4 { font-family: 'Bungee'; font-size: 0.6rem; color: #555; }
         .stat-box p { font-family: 'Bungee'; font-size: 0.9rem; }
 
-        /* Hero Image with Black Layer Effect */
         .main-img { 
             width: 320px; 
             border-radius: 20px; 
@@ -34,13 +53,19 @@
             transition: 0.3s;
         }
 
-        /* Button Positioning: Left & Right + Bottom Middle */
+        /* Button Styling */
         .btn-container {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
             max-width: 500px;
             margin: 30px auto 10px;
+            gap: 20px;
+        }
+        .btn-row {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
         }
         .btn-custom {
             font-family: 'Bungee';
@@ -62,7 +87,16 @@
         }
         .btn-custom:active { transform: translate(2px, 2px); box-shadow: none; }
 
-        /* NFT Gallery with Black Outline Layers */
+        /* Timer Style */
+        #timer {
+            font-family: 'Bungee';
+            font-size: 1.2rem;
+            color: #ff0000;
+            margin-top: 10px;
+            letter-spacing: 1px;
+        }
+
+        /* Gallery */
         .gallery {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -86,21 +120,14 @@
         .nft-item img { position: absolute; width: 100%; height: 100%; opacity: 0; transition: 0.5s; object-fit: cover; }
         .nft-item.revealed img { opacity: 1; }
 
-        /* Professional Roadmap */
+        /* Roadmap */
         .roadmap { text-align: left; padding: 40px; background: #fafafa; border: 4px solid #000; border-radius: 20px; margin: 80px 0; box-shadow: 10px 10px 0px #eee; }
         .roadmap h2 { font-family: 'Bungee'; color: var(--accent); margin-bottom: 25px; border-bottom: 4px solid #000; display: inline-block; }
         .phase { margin-bottom: 35px; border-left: 5px solid var(--primary); padding-left: 20px; }
         .phase h3 { font-family: 'Bungee'; font-size: 1.1rem; margin-bottom: 8px; }
         .phase p { font-size: 0.95rem; color: #444; line-height: 1.5; }
 
-        /* FAQ Section */
-        .faq { text-align: left; margin-bottom: 80px; }
-        .faq h2 { font-family: 'Bungee'; margin-bottom: 25px; }
-        .faq-item { border-bottom: 2px solid #eee; padding: 15px 0; }
-        .faq-item h4 { font-family: 'Space Grotesk'; font-weight: 700; color: #000; }
-        .faq-item p { font-size: 0.9rem; color: #666; margin-top: 5px; }
-
-        /* Security Modal (Same as previous for stability) */
+        /* Modal Styles */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; }
         .modal-box { background: #fff; width: 90%; max-width: 450px; padding: 35px; border: 5px solid #000; border-radius: 15px; }
         .step { display: none; }
@@ -111,7 +138,6 @@
         .next-btn.ready { background: var(--primary); cursor: pointer; }
         input { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #000; font-family: 'Space Grotesk'; }
 
-        /* Footer Twitter */
         .footer { padding: 50px 0; border-top: 2px solid #eee; }
         .follow-x { display: inline-block; background: #000; color: #fff; padding: 15px 40px; font-family: 'Bungee'; text-decoration: none; border-radius: 50px; transition: 0.3s; }
         .follow-x:hover { background: var(--accent); transform: scale(1.05); }
@@ -120,6 +146,10 @@
     </style>
 </head>
 <body>
+
+    <div class="scrolling-ticker">
+        <div class="ticker-text">GTD FREE MINT &nbsp;&nbsp; GTD FREE MINT &nbsp;&nbsp; GTD FREE MINT &nbsp;&nbsp; GTD FREE MINT &nbsp;&nbsp; GTD FREE MINT &nbsp;&nbsp; GTD FREE MINT</div>
+    </div>
 
     <div class="container">
         <h1>CHROMA MELEONS</h1>
@@ -133,9 +163,13 @@
         <img src="https://i.ibb.co.com/WNqpmm2d/20260409-054444.png" class="main-img" alt="Hero Meleon">
         
         <div class="btn-container">
-            <button class="btn-custom gtd-btn" onclick="openModal()">GTD ACCESS</button>
-            <a href="https://opensea.io/collection/chromameleons/overview" target="_blank" class="btn-custom mint-btn">MINT PAGE</a>
+            <div class="btn-row">
+                <button class="btn-custom gtd-btn" id="gtdMainBtn" onclick="handleGtdClick()">GTD ACCESS</button>
+                <a href="https://opensea.io/collection/chromameleons/overview" target="_blank" class="btn-custom mint-btn">MINT PAGE</a>
+            </div>
+            <div id="timer">00:00:00:00</div>
         </div>
+        
         <button class="btn-custom approved-trigger" onclick="fetchApproved()">Check Approved List</button>
         <div id="approvedList" class="approved-list">Updating List...</div>
 
@@ -209,7 +243,18 @@
             </div>
             <div class="step" id="s4">
                 <h2 style="color:var(--primary)">CONGRATULATIONS!</h2>
-                <p>Your data has been sent for manual verification. Stay tuned!</p>
+                <p style="margin-bottom:15px;">Your data has been sent for manual verification. Stay tuned!</p>
+                <p style="font-size: 0.9rem; color: #555; border: 1px solid #ddd; padding: 10px; border-radius: 5px; background: #fdfdfd;">
+                    <b>NOTICE:</b> All approved accounts will undergo a second verification check to filter out fake accounts and ensure project security. 
+                </p>
+                <a href="https://x.com/ChromaMeleons" target="_blank" class="task-link done" style="margin-top:20px;">FOLLOW X FOR UPDATES</a>
+                <button class="next-btn ready" onclick="location.reload()">CLOSE</button>
+            </div>
+            <div class="step" id="sExpired">
+                <h2 style="color:red">REGISTRATION CLOSED</h2>
+                <p style="margin: 20px 0;">The GTD Access application period has officially ended. Thank you for your interest!</p>
+                <p style="font-size: 0.9rem; margin-bottom: 20px;">Don't miss our future updates and public minting info. Follow us on Twitter now.</p>
+                <a href="https://x.com/ChromaMeleons" target="_blank" class="task-link" style="background: #000; color: #fff;">FOLLOW @CHROMAMELEONS</a>
                 <button class="next-btn ready" onclick="location.reload()">CLOSE</button>
             </div>
         </div>
@@ -217,6 +262,39 @@
 
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbySQaVfGEjWkSRUQuVyXzLkP4XBHbWojWX4T50thUvQto2JuMVnbqQfkGjCowyXnGkq/exec"; 
+        
+        let isExpired = false;
+        const targetTime = new Date("April 14, 2026 16:00:00 UTC").getTime();
+
+        // Countdown Timer Logic
+        const timerInterval = setInterval(function() {
+            const now = new Date().getTime();
+            const diff = targetTime - now;
+
+            if (diff <= 0) {
+                clearInterval(timerInterval);
+                document.getElementById("timer").innerHTML = "REGISTRATION CLOSED";
+                document.getElementById("gtdMainBtn").innerText = "CLOSED";
+                document.getElementById("gtdMainBtn").style.background = "#555";
+                isExpired = true;
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById("timer").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }, 1000);
+
+        function handleGtdClick() {
+            document.getElementById('taskModal').style.display = 'flex';
+            if (isExpired) {
+                document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+                document.getElementById('sExpired').classList.add('active');
+            }
+        }
 
         let checks = { 1:false, 2:false, 3:false, 4:false, 5:false };
 
@@ -235,7 +313,6 @@
             document.getElementById('s'+n).classList.add('active');
         }
 
-        function openModal() { document.getElementById('taskModal').style.display = 'flex'; }
         function reveal(el) { el.classList.add('revealed'); }
 
         function submit() {
